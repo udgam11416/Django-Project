@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Register{% endblock title %}
+{% block registeractive %}active{% endblock registeractive %}
+{% block content %}
+<form class="row g-3" action="register" method="POST">
+    {% csrf_token %}
+    <div class="col-md-6">
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{request.GET.next}}" class="form-control">
+
+        {% endif %}
+      <label for="i1" class="form-label">First name</label>
+      <input type="text" name="first_name" class="form-control" id="i1" required>
+    </div>
+    <div class="col-md-6">
+      <label for="i2" class="form-label">Last name</label>
+      <input type="text" name="last_name" class="form-control" id="i2" required>
+    </div>
+    <div class="col-md-6">
+      <label for="i3" class="form-label">Username</label>
+      <input type="text" name="username" class="form-control" id="i3" required>
+    </div>
+    <div class="col-md-6">
+      <label for="i4" class="form-label">Email</label>
+      <input type="email" name="email" class="form-control" id="i4" required>
+    </div>
+    <div class="col-md-6">
+      <label for="i5" class="form-label">Password</label>
+      <input type="password" name="password1" class="form-control" id="i5" required>
+    </div>
+    <div class="col-md-6">
+      <label for="i6" class="form-label">Confirm Password</label>
+      <input type="password" name="password2" class="form-control" id="i6" required>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Register</button>
+    </div>
+  </form>
+  <div>
+    <h4>Attributes of httprequest object</h4>
+    <li>scheme:{{request.scheme}}</li>
+    <li>path:{{request.path}}</li>
+    <li>method:{{request.method}}</li>
+    <li>GET:{{request.GET}}</li>
+    <li>POST:{{request.POST}}</li>
+    <li>USER:{{request.user}}</li>
+  </div>
+{% endblock content %}

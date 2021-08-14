@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Video{% endblock title %}
+{% block mycss %}
+<style>
+    #catlist img{
+        height:150px;
+        width:200px;
+    }
+    
+
+</style>
+{% endblock mycss %}
+{% block content %}
+<div class="container">
+    <div class="row">
+    {% for c in category %}
+    <div class="col col-4" id="catlist">
+        <h4><a href="{% url 'newvideo:categoryview' c.slug %}">{{c.name}}</a></h4>
+        <img src="{{c.img.url}}" alt="image">
+    </div>
+    {% endfor %}
+
+
+    </div>
+
+</div>
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Video{% endblock title %}
+{% block mycss %}
+<style>
+    .container img{
+        height:150px;
+        width:200px;
+    }
+    
+
+</style>
+{% endblock mycss %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h3>{{category.name}}</h3>
+            {% for ar in article %}
+            <div class="col col-4">
+                  <h4>{{ar.title}}</h4>
+                  <img src="{{ar.img.url}}" alt="image">
+                  <h5><a href="{% url 'newvideo:articledetail' ar.slug %}">Show me details</a></h5>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock content %}

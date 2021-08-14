@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Register{% endblock title %}
+{% block loginactive %}active{% endblock loginactive %}
+{% block content %}
+<form class="row g-3" action="/users/login" method="POST">
+    {% csrf_token %}
+       
+
+    <div class="col-md-6">
+        {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{request.GET.next}}" class="form-control">
+
+        {% endif %}
+      <label for="i3" class="form-label">Username</label>
+      <input type="text" name="username" class="form-control" id="i3" required>
+    </div>
+    <div class="col-md-6">
+      <label for="inputPassword4" class="form-label">Password</label>
+      <input type="password" name="password" class="form-control" id="inputPassword4" required>
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">login</button>
+    </div>
+  </form>
+  {{request.path}}
+{% endblock content %}

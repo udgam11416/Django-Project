@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}home{% endblock title %}
+{% block homeactive %}active{% endblock homeactive %}
+{% block content %}
+
+<div class="card">
+
+<div class="card-body">
+  <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner imgcarousel">
+      <div class="carousel-item active">
+        <img src="{% static 'images/ai.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img  src="{% static 'images/comp.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'images/monitor.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<div>
+  <h4>Attributes of httprequest object</h4>
+  <li>scheme:{{request.scheme}}</li>
+  <li>path:{{request.path}}</li>
+  <li>method:{{request.method}}</li>
+  <li>GET:{{request.GET}}</li>
+  <li>POST:{{request.POST}}</li>
+  <li>USER:{{request.user}}</li>
+</div>
+<img src="" alt="">
+{% endblock content %}
+

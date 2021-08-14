@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <link href="{% static '/css/style.css' %}" rel="stylesheet" type="text/css">
+    <title>{% block title %}{% endblock title %}</title>
+      {% block mycss %}{% endblock mycss %}
+
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'home:home' %}">MyBlog.in</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link {% block homeactive %}{% endblock homeactive %}" aria-current="page" href="{% url 'home:home' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% block videoactive %}{% endblock videoactive %}" href="{% url 'newvideo:categorylist' %}">Videos</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% block blogactive %}{% endblock blogactive %}" href="{% url 'blog:BlogHome' %}">Blog</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% block aboutactive %}{% endblock aboutactive %}" href="{% url 'home:about'%}">About us</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link {% block contactactive %}{% endblock contactactive %}" href="#">Contact Us</a>
+              </li>
+            </ul>
+            <form class="form-inline my-2 my-lg-0 mr-3" method="GET" action="/search">
+              <input class="form-control me-2" type="search" placeholder="Search this website" aria-label="Search" name="query" id="query" type="search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav"> 
+              {% if user.is_authenticated %}
+              <li class="nav-item">Hi,{{user.first_name}}</li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{% url 'users:logout' %}">logout</a>
+                  </li>
+
+                  {% else %}
+                    <li class="nav-item {% block loginactive %}{% endblock loginactive %}" >
+                    <a class="nav-link " href="{% url 'users:login' %}">Login</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% block registeractive %}{% endblock registeractive %}" href="{% url 'users:register' %}">Register</a>
+                  </li>
+                  {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} mb-0 alert-dismissible fade show " role="alert">
+<strong>New message:
+</strong>{{ message }}
+<button type="button" class="close" data-dismiss = "alert" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
+  </div>
+  {% endfor %}
+
+      {% block content %}
+      {% endblock content %}
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script type="text/javascript">
+      $(document).ready(function(event){
+                      $(document).on('click', '#like', function(event){
+                          event.preventDefault();
+                          var pk = $(this).attr('value');
+                          $.ajax({
+                              type: 'POST',
+                              url: '{% url "blog:like_post" %}',
+                              data: {
+                                  'id': pk,
+                                  'csrfmiddlewaretoken': '{{ csrf_token }}'
+                              },
+                              datatype: 'json',
+                              success: function(response){
+                                  $('#like-section').html(response['form'])
+      
+                              },
+                              error: function(rs, e){
+                                  console.log(rs.responseText);
+                              },
+                          });
+                      });
+                  });
+      </script>
+</body>
+</html>

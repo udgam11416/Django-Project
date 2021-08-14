@@ -1,0 +1,150 @@
+{% extends 'base.html'%}
+{% block videoactive %}active{% endblock videoactive %}
+{% load embed_video_tags %}
+{% load humanize %}
+{% load extras %}
+
+    {%load static%}
+
+    {%block content%}
+
+    
+    <div class="container" style="padding-left:82px;padding-right:82px">
+    <div class="row">
+            <div class="col-md-12 px-0 mod">
+            <div class="videobox">
+                 <div id="spiderheading">
+                <h1> HOW TO INSTALL {{article.title}}</h1>
+                </div>
+                <div class="container embed-responsive embed-responsive-16by9 px-3" id="vid">
+                    {%video article.video 'small'%}
+                </div>
+            </div>
+            <hr id="customhr3" style="width:16%;height: 2px;
+            margin: 10px auto;margin-top:20px;">
+            <ul>
+                
+                <!-- <h2 style="text-align: center;">Mod Name: {{article.modnamever}}</h2> -->
+                <p>{{article.desc}}</p>
+                <!-- <p> Credits: <br>
+                     
+                <table id="table1">
+                    <tbody> -->
+                        <!-- <tr>
+                            <td>Mod Creater :</td>
+                            <td>{{article.modername}}</td>
+                        </tr> -->
+                        <!-- <tr>
+                            <td>{{article.modername}}'s <br>Youtube Channel</td>
+                            <td><a href="{{article.moderyt}}"><button>subscribe</button></a></td>
+                            
+                        </tr>
+                        <tr>
+                            <td>{{article.modername}}'s <br>Patreon</td>
+                            <td><a href="{{article.moderpatreon}}">Show Support<button></button></a></td>
+                        </tr>
+                    </tbody>
+                </table></p>
+                    <li>{{article.modername}}'s Youtube Channel: <br>
+                    </li>
+            </ul>
+        </div>
+        </div> -->
+        
+        <!-- section for comments -->
+        <div class="container"> 
+            <h2>{{comments.count}} Comments</h2>
+            <div class="my-3">
+                {% if user.is_authenticated %}
+                <form action="/newvideo/postComment" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Write your comment</label>
+                        <input type="text" class="form-control" name="desc" placeholder="Enter comment here">
+                        <input type="hidden" name="parentSno" value="">
+    
+                    </div>
+                <input type="hidden" name="articleSno" value="{{article.sno}}">
+                <input type="submit" value="Submit">
+                </form>
+                {% else %}
+                      <div class="card card-body">
+                          <div class="row">
+                              <div class="col-md-6">
+                                <h3>Please <a href="{% url 'users:login' %}?next={% firstof request.path '/' %}">Login</a>to comment or reply</h3>
+                              </div>
+                              <div class="col-md-6">
+
+                                    <h3 style="margin-top: 10px;font-weight:bold;">Don't Have Account?</h3>
+                                    <button style="margin-left: 8px; padding:3px 5px;"><a href="{% url 'users:register' %}?next={% firstof request.path '/' %}" style="text-decoration: none;">Create an Account</a></button>
+                            
+                              </div>
+                          </div>
+                          
+                           
+                     
+               
+        </div>
+                {% endif %}
+            </div>
+            
+            {% for comment in comments %}
+            <div class="row my-3">
+                
+                <div class="col-md-1"><img class="rounded mx-auto d-block" src="/static/images/ai.jpg" alt="" style="width: 67px;"></div>
+                <div class="col-md-11"><b>{{comment.username.username}} &nbsp;{{comment.timestamp}}</b>
+                </div>
+                <div>{{comment.desc}}</div>
+                <div class="reply mx-0">
+                    {% if user.is_authenticated %}
+                   
+                    
+                        <div class="card card-body my-2">
+                            <form action="/newvideo/postComment" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Post a reply</label>
+                                    <input type="text" class="form-control" name="desc" placeholder="Enter comment here">
+                                <input type="hidden" name="parentSno" value="{{comment.srno}}">
+                
+                                </div>
+                            <input type="hidden" name="articleSno" value="{{article.sno}}">
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                            </form>
+                        </div>
+                
+                    {% else %}
+                    <button class="btn btn-sm btn-primary" type="button" data-toggle="collapse" data-target="#replyBox{{comment.srno}}" aria-expanded="false" aria-controls="replyBox{{comment.srno}}">
+                       Reply
+                    </button>
+                    
+                    {% endif %}
+                    <div class="replies my-2">
+                        {% for reply in repDict|get_val:comment.srno %}
+                        <div class="row">
+                            <div class="col-md-1">
+                                <img class="rounded mx-auto d-block" src="/static/images/user.png" alt="" style="width: 67px;"> 
+                            </div>
+                            <div class="col-md-11">
+                                <b>{{reply.username.username}}</b> &nbsp; <span class="badge badge-secondary" style="font-size: 13px;">{{reply.timestamp}}</span>
+                                <div>{{reply.desc}}</div>
+
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- {{request.path}} -->
+       
+    {%endblock content%}
+
+
+
+
+
+
